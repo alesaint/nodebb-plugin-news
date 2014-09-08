@@ -1,0 +1,26 @@
+{
+	"id": "nodebb-plugin-news",
+	"name": "News",
+	"description": "NodeBB Plugin News",
+	"url": "https://github.com/alesaint/nodebb-plugin-news",
+	"library": "./library.js",
+	"hooks": [
+        { "hook": "static:app.load", "method": "register.load" },
+        { "hook": "filter:admin.header.build", "method": "register.admin.addNavigation" },
+        { "hook": "filter:header.build", "method": "register.global.addNavigation" },
+        { "hook": "filter:widgets.getWidgets", "method": "widget.define" },
+        { "hook": "filter:widget.render:news", "method": "widget.render" }
+	],
+	"staticDirs": {
+		"public": "./public"
+	},
+	"less": [
+		"public/less/style.less"
+	],
+	"scripts": [
+		"public/js/loader.js",
+		"public/js/lib/"
+	],
+	"templates": "./templates",
+	"minver": "0.0.5"
+}

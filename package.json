@@ -1,0 +1,38 @@
+{
+  "name": "nodebb-plugin-news",
+  "version": "0.0.5",
+  "description": "NodeBB News Plugin",
+  "main": "library.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alesaint/nodebb-plugin-news"
+  },
+  "keywords": [
+    "nodebb",
+    "plugin",
+    "shoutbox"
+  ],
+  "author": {
+    "name": "alesaint@wiztivi.com"
+  },
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/alesaint/nodebb-plugin-news/issues"
+  },
+  "dependencies": {
+    "async": "~0.2.9",
+    "body-parser": "^1.8.0",
+    "path": "~0.4.9",
+    "string": "~1.8.0"
+  },
+  "readme": "# NodeBB News plugin\n\nThis is a NodeBB plugin that will add a news to your homepage. It's still a work in progress.\n\n## Installation\n\n    npm install nodebb-plugin-news\n",
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/alesaint/nodebb-plugin-news",
+  "_id": "nodebb-plugin-news@0.0.4",
+  "_shasum": "0421a192ce9cfe13f985fe52502cb825f908340a",
+  "_from": "nodebb-plugin-news@0.0.4",
+  "_resolved": "https://registry.npmjs.org/nodebb-plugin-news/-/nodebb-plugin-news-0.0.4.tgz"
+}

@@ -1,0 +1,138 @@
+@border-size: 2px;
+@avatar-size: 30px;
+@avatar-image-size: @avatar-size - (2 * @border-size);
+@status-online: #060;
+@status-away: #cc0;
+@status-dnd: #900;
+@status-offline: gray;
+
+#news {
+  background-color:blue;
+  position:relative;
+  width:100%;
+  height:150px;
+
+}
+
+.news-admin {
+  &-feature {
+    opacity: 1;
+
+    &.disabled {
+      opacity: 0.5;
+    }
+
+    & .feature-icon {
+      opacity: 0.8;
+    }
+  }
+}
+
+.admin .news .entry-row{
+  border-radius: 10px;
+  cursor: move;
+  list-style-type: none;
+}
+
+
+#slidebox {
+  background-color: #3d4456;
+  padding: 20px;
+}
+
+#slidebox .inner {
+  background-color: #a3a9b4;
+  height: 250px;
+  position: relative;
+}
+
+#slidebox .left, #slidebox .right {
+  width: 35px;
+  height: 35px;
+  background: url(images/arrow_left_open.png) no-repeat center center #37a8d2;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0.6;
+  transition: 0.2s opacity linear;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#slidebox .right {
+  right: 0;
+  background-image: url(images/arrow_right_open.png);
+}
+
+#slidebox .slideImage.selected {
+  visibility: visible;
+  opacity: 1;
+}
+#slidebox .slideImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  transition: 0.8s all linear;
+  visibility: hidden;
+  opacity: 0;
+}
+
+#slidebox .caption {
+  padding: 5px;
+  position: absolute;
+  overflow: hidden;
+  max-width: 50%;
+  max-height: 50%;
+  left: 50px;
+  bottom: 60px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 20px;
+  font-family: Doppio One;
+  z-index: 5;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#slidebox .readMore {
+  position: absolute;
+  bottom: 20px;
+  right: 50px;
+  z-index: 5;
+}
+.generalButton:hover {
+  background-color: #04B8F4;
+  color: white;
+}
+
+#slidebox .left div, #slidebox .right div {
+  border-radius: 20%;
+  border: 1px solid blue;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  opacity: 0;
+}
+
+#slidebox .imageNews{
+  width:100%;
+  height:100%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
