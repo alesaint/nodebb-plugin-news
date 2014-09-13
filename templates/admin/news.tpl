@@ -25,14 +25,9 @@
 
             <hr>
 
-
-            <div class="form-group">
-                            <label for="userPhoto">[[user:upload_a_picture]]</label>
-                            <input type="file" id="userPhotoInput"  name="userPhoto">
-                            <p class="help-block">[[user:image_spec]] <span id="file-size-block" class="hide"> ([[user:max]] <span id="upload-file-size"></span> kbs.)</span></p>
-                        </div>
-
             <input type="hidden" name="_csrf" value="{token}" id="csrf-token" />
+            <input type="hidden" name="catId" value="{catId}" id="catId" />
+
 
              <button id="save" class="btn btn-success btn-xs pull-right">
                        Save

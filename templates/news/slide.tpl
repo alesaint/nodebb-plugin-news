@@ -5,7 +5,7 @@
         <div class="images">
             <!-- BEGIN news -->
             <div class="slideImage">
-                <div class="imageNews" style="background-image:url(http://www.omegacitizen.com/gamecity/placeholders/slider4.jpg);" alt="{news.title}"></div>
+                <div class="imageNews" style="background-image:url({news.pathImg});" alt="{news.title}"></div>
                 <a href="article.html"></a>
             </div>
             <!-- END news -->

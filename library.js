@@ -1,4 +1,7 @@
 var	NodeBB = require('./lib/nodebb'),
+    fs = require('fs'),
+    path = require('path'),
+    file = NodeBB.file,
 	Config = require('./lib/config'),
     Backend = require('./lib/backend'),
 	app;
@@ -27,12 +30,15 @@ News.register = {
 		app.get('/api' + Config.plugin.route, renderGlobal);
 
 		app.get('/admin' + Config.plugin.route, middleware.admin.buildHeader, renderAdmin);
+        app.post('/admin' + Config.plugin.route +'/uploadImage', middleware.authenticate, uploadImage);
+
         app.get('/api/admin' + Config.plugin.route, renderAdmin);
 
         app.get('/api' + Config.plugin.route +'/list', getNews);
 
         app.post('/api/admin' + Config.plugin.route +'/add', addNews);
         app.post('/api/admin' + Config.plugin.route +'/remove', removeNews);
+
 
 
 
@@ -90,9 +96,51 @@ function addNews(req, res, next) {
     var title = req.body.title;
     var content =  req.body.content;
 
-    Backend.addNews(title,content, function(){
-        res.redirect('/admin' + Config.plugin.route);
+    Backend.addNews(title,content, function(error,news){
+        res.json(news);
     });
+}
+
+
+
+
+
+
+
+
+
+function uploadImage(req, res, next) {
+
+    try {
+        params = JSON.parse(req.body.params);
+    } catch (e) {
+        var err = {
+            error: 'Error uploading file! Error :' + e.message
+        };
+        return res.send(req.xhr ? err : JSON.stringify(err));
+    }
+    var filename =  'news-' + params.cid + path.extname(req.files.userPhoto.name);
+    function done(err, image) {
+        var er, rs;
+        fs.unlink(req.files.userPhoto.path);
+
+        if(err) {
+            er = {error: err.message};
+            return res.send(req.xhr ? er : JSON.stringify(er));
+        }
+
+        Backend.addImg(params.cid,image.url, function(){
+            rs = {path: image.url};
+            res.send(req.xhr ? rs : JSON.stringify(rs));
+        });
+
+
+    }
+
+    file.saveFileToLocal(filename, req.files.userPhoto.path, done);
+
+
+
 }
 
 function getNews(req, res, next) {
