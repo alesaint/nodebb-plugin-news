@@ -46,12 +46,6 @@
         $('#slidebox .slideImage.selected').removeClass('selected');
         $(next).addClass('selected')
 
-        var caption = $('.imageNews', next).attr('alt');
-        var link = $('a', next).attr('href');
-
-        $('#slidebox .caption').text(caption);
-        $('#slidebox .readMore').attr('href', link);
-
         autoTransition();
     }
 

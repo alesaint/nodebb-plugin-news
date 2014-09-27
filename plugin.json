@@ -6,11 +6,16 @@
 	"library": "./library.js",
 	"hooks": [
         { "hook": "static:app.load", "method": "register.load" },
+        { "hook": "action:topic.save", "method": "register.created" },
+        { "hook": "action:topic.delete", "method": "register.deleted" },
         { "hook": "filter:admin.header.build", "method": "register.admin.addNavigation" },
         { "hook": "filter:header.build", "method": "register.global.addNavigation" },
         { "hook": "filter:widgets.getWidgets", "method": "widget.define" },
-        { "hook": "filter:widget.render:news", "method": "widget.render" }
-	],
+        { "hook": "filter:widget.render:news", "method": "widget.render" },
+        { "hook": "filter:widget.render:news-home", "method": "widget.renderHome" }
+
+    ],
+
 	"staticDirs": {
 		"public": "./public"
 	},
@@ -22,5 +27,5 @@
 		"public/js/lib/"
 	],
 	"templates": "./templates",
-	"minver": "0.0.5"
+	"minver": "0.0.7"
 }

@@ -6,12 +6,10 @@
             <!-- BEGIN news -->
             <div class="slideImage">
                 <div class="imageNews" style="background-image:url({news.pathImg});" alt="{news.title}"></div>
-                <a href="article.html"></a>
+                <a class="readMore generalButton" href="/topic/{news.tid}">{news.title}</a>
             </div>
             <!-- END news -->
         </div>
-        <div class="caption"></div>
-        <a class="readMore generalButton" href="article.html">Keep Reading</a>
     </div>
 </div>
 

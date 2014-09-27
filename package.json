@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-news",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "NodeBB News Plugin",
   "main": "library.js",
   "scripts": {
@@ -31,8 +31,8 @@
   "readme": "# NodeBB News plugin\n\nThis is a NodeBB plugin that will add a news to your homepage. It's still a work in progress.\n\n## Installation\n\n    npm install nodebb-plugin-news\n",
   "readmeFilename": "README.md",
   "homepage": "https://github.com/alesaint/nodebb-plugin-news",
-  "_id": "nodebb-plugin-news@0.0.4",
+  "_id": "nodebb-plugin-news@0.0.7",
   "_shasum": "0421a192ce9cfe13f985fe52502cb825f908340a",
-  "_from": "nodebb-plugin-news@0.0.4",
-  "_resolved": "https://registry.npmjs.org/nodebb-plugin-news/-/nodebb-plugin-news-0.0.4.tgz"
+  "_from": "nodebb-plugin-news@0.0.7",
+  "_resolved": "https://registry.npmjs.org/nodebb-plugin-news/-/nodebb-plugin-news-0.0.7.tgz"
 }

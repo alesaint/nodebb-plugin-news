@@ -4,13 +4,17 @@ var	NodeBB = require('./lib/nodebb'),
     file = NodeBB.file,
 	Config = require('./lib/config'),
     Backend = require('./lib/backend'),
-	app;
+    Settings = NodeBB.settings,
+    categories = NodeBB.categories,
+    app;
+
 
 var News = {};
 
 News.register = {
 	load: function(expressApp, middleware, controllers, callback) {
 		app = expressApp;
+
 
 		function renderGlobal(req, res, next) {
 			Config.getTemplateData(function(data) {
@@ -20,7 +24,14 @@ News.register = {
 
 		function renderAdmin(req, res, next) {
             Config.getTemplateData(function(data) {
-                res.render('admin/' + Config.plugin.id, data);
+                categories.getAllCategories(function (err, categoryData) {
+
+                    data.categories = categoryData;
+                    res.render('admin/' + Config.plugin.id, data);
+
+                });
+
+
             });
 		}
 
@@ -38,13 +49,19 @@ News.register = {
 
         app.post('/api/admin' + Config.plugin.route +'/add', addNews);
         app.post('/api/admin' + Config.plugin.route +'/remove', removeNews);
+        app.post('/api/admin' + Config.plugin.route +'/addTopic', addTopic);
+        app.post('/api/admin' + Config.plugin.route +'/addCategoryForNews', addCategoryForNews);
 
 
 
 
         callback(expressApp, middleware, controllers);
 	},
-	global: {
+    created: function(topic,cb) {
+    },
+    deleted: function(topic,cb) {
+    },
+    global: {
 		addNavigation: function(custom_header, callback) {
 			if (Config.global.get('toggles.headerLink')) {
 				custom_header.navigation.push({
@@ -80,6 +97,14 @@ News.widget = {
             content: ''
         });
 
+        widgets.push({
+            name: Config.plugin.name+"-home",
+            widget: Config.plugin.id+"-home",
+            description: Config.plugin.description,
+            content: ''
+        });
+
+
         callback(null, widgets);
     },
     render: function(widget, callback) {
@@ -87,6 +112,14 @@ News.widget = {
         widget.data.container = '';
         Config.getTemplateData(function(data) {
             app.render('news/slide', data, callback);
+        })
+
+    },
+    renderHome: function(widget, callback) {
+        //Remove any container
+        widget.data.container = '';
+        Config.getTemplateData(function(data) {
+            app.render('news', data, callback);
         })
 
     }
@@ -154,9 +187,33 @@ function removeNews(req, res, next) {
     var sid = req.body.cid;
     Backend.removeNews(sid,function(){
         res.redirect('/admin' + Config.plugin.route);
+
     });
 
 }
+
+
+function addTopic(req, res, next) {
+    var sid = req.body.sid;
+    var topicId = req.body.topicId;
+    Backend.addTopic(sid, topicId, function(err, data){
+        res.json(data);
+    });
+}
+
+function addCategoryForNews(req, res, next) {
+    var cid = req.body.cid;
+
+    //Settings.set("categoryIdForNews",cid);
+
+    Config.saveCategoryId(cid)
+    res.json({});
+    /*Settings.addTopic(sid, topicId, function(err, data){
+        res.json(data);
+    });*/
+}
+
+
 
 
 module.exports = News;

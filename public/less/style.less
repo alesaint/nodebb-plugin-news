@@ -49,7 +49,7 @@
 #slidebox .left, #slidebox .right {
   width: 35px;
   height: 35px;
-  background: url(images/arrow_left_open.png) no-repeat center center #37a8d2;
+  background: url(plugins/nodebb-plugin-news/public/images/arrow_left_open.png) no-repeat center center #37a8d2;
   margin: auto;
   position: absolute;
   top: 0;
@@ -67,7 +67,7 @@
 
 #slidebox .right {
   right: 0;
-  background-image: url(images/arrow_right_open.png);
+  background-image: url(/plugins/nodebb-plugin-news/public/images/arrow_right_open.png);
 }
 
 #slidebox .slideImage.selected {
@@ -135,4 +135,101 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.generalButton {
+  padding: 5px 15px;
+  color: white;
+  font-family: Open Sans;
+  font-weight: bold;
+  display: inline-block;
+  background-color: #37a8d2;
+  border: none;
+  cursor: pointer;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  transition: 0.3s linear;
+}
+
+article:not(:last-of-type) {
+  border-bottom: 2px solid #d5dae2;
+}
+article {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+.inlineContainer {
+  letter-spacing: -0.31em;
+}
+article{
+  display: block;
+
+}
+
+.news .details {
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height:160px;
+  margin-top:40px;
+}
+.news .details, .news .post {
+  display: inline-block;
+  vertical-align: top;
+  color:#798896;
+}
+.inlineContainer > *:not(.inlineContainer) {
+  letter-spacing: normal;
+}
+
+article .tag {
+  color: white;
+  background-color: #4a6da6;
+  padding: 1px 6px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.news .image img {
+  height: 130px;
+  width: 130px;
+  display: block;
+}
+
+.news .post {
+  padding-left: 20px;
+  font-family: Open Sans;
+}
+.news .details, .news .post {
+  display: inline-block;
+  vertical-align: top;
+}
+.inlineContainer > *:not(.inlineContainer) {
+  letter-spacing: normal;
+}
+.borderBox {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+article h3 {
+  font-size: 1.7em;
+  line-height: 1.2em;
+  padding-bottom: 10px;
+}
+h3{
+  font-family: Doppio One;
+  color: #37a8d2;
+}
+
+.bottom .generalButton{
+  float:right;
 }

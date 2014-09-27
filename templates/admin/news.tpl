@@ -2,12 +2,34 @@
     <div class="col-md-12">
         <h1>News</h1>
 
+    <div class="col-md-12">
+        <form class="form" id="newsSettingsForm" method="post" action="/admin/news/add">
+            <h3>Settings News</h3>
+
+            <hr>
+
+            <div class="form-group">
+                <label for="categoryId">Category for news</label>
+                <select id="categoryNewsId" class="form-control">
+                <!-- BEGIN categories -->
+                    <option value="{categories.cid}">{categories.name}</option>
+                <!-- END categories -->
+            </select>
+
+            </div>
+
+
+             <button id="saveSettings" class="btn btn-success btn-xs pull-right">
+                       Save
+             </button>
+
+
+        </form>
+    </div>
 
     <div class="col-xs-6 pull-left">
         <form class="form" id="newsForm" method="post" action="/admin/news/add">
-            <h3>Settings
-                <small>Add news</small>
-            </h3>
+            <h3>Add news</h3>
 
             <hr>
 
@@ -37,8 +59,7 @@
         </form>
     </div>
     <div class="col-xs-6 pull-right">
-        <h3>Settings
-            <small>Manage news</small>
+        <h3>Manage</small>
         </h3>
 
         <hr>
@@ -46,6 +67,7 @@
             <ul class="col-md-12 ui-sortable" id="entry-container">
             <!-- BEGIN news -->
                 <li data-cid="{news._key}" class="entry-row">
+                    <input type="hidden" data-tid="{news.tid}"/>
                     <div class="well">
                         <form class="form">
                             <div class="row">
