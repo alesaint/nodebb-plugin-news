@@ -64,6 +64,22 @@ News.register = {
                         callback(err, news);
                     });
                 }
+            },
+            order: function(socket, newsList, callback){
+                    Backend.setOrder(newsList, function(err, news) {
+                        callback(err, news);
+                    })
+            },
+            loadMore:function(socket, data, callback){
+
+                console.log("loadMore>>>>>>>>>//")
+                var start = parseInt(data.after, 10),
+                    end = start + 5 - 1;
+
+                Config.getTemplateData(function(data) {
+                    console.log("getTemplateData>>>>>>>>>//",data)
+                    callback(null, data);
+                }, 0, -1);
             }
         };
 
@@ -137,8 +153,9 @@ News.widget = {
         //Remove any container
         widget.data.container = '';
         Config.getTemplateData(function(data) {
+
             app.render('news', data, callback);
-        })
+        }, 0, 4);
 
     }
 };

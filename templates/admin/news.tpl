@@ -75,7 +75,7 @@
         </h3>
 
         <hr>
-        <div class="row admin-categories">
+        <div class="row admin-news">
             <ul class="col-md-12 ui-sortable" id="entry-container">
             <!-- BEGIN news -->
                 <li data-cid="{news._key}" class="entry-row">
@@ -102,6 +102,7 @@
                                         </div>
                                     </div>
                                </div>
+                               <input type="hidden" data-name="order" data-value="{news.order}" value="{news.order}">
                         </form>
                     </div>
                 </li>

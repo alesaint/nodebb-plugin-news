@@ -183,6 +183,49 @@
             });
 
 
+            var modified_news = [];
+
+            function modified(el) {
+                var cid = $(el).parents('li').attr('data-cid');
+                if(cid) {
+                    modified_news.push({
+                        cid:cid,
+                        order:$(el).val()
+                    });
+                }
+            }
+
+            function updateNewsOrders() {
+                console.log("updateNewsOrders");
+                var news = $('.admin-news #entry-container').children();
+                for(var i = 0; i<news.length; ++i) {
+                    var input = $(news[i]).find('input[data-name="order"]');
+
+                    input.val(i+1).attr('data-value', i+1);
+                    modified(input);
+                }
+                console.log("before save");
+                saveOrder();
+            }
+
+            function saveOrder() {
+                console.log("modified_news>>>>>>>>>>>>>>",modified_news);
+                if(modified_news.length) {
+                    console.log("emit>>>>>>>>>>>>>>");
+                    socket.emit('plugins.news.order', modified_news, function(err, result) {
+                        console.log("Success save order");
+                    })
+                }
+            }
+
+
+            $('#entry-container').sortable({
+                stop: function(event, ui) {
+                    modified_news = [];
+                    updateNewsOrders();
+                },
+                distance: 10
+            });
 
 
 		});

@@ -1,7 +1,7 @@
 <div class="row news">
-    <div class="col-md-12">
+    <div class="col-md-12" #news-container>
        <!-- BEGIN news -->
-       <article class="inlineContainer col-md-12 col-xs-12">
+       <article data-sid="{news.sid}" class="inlineContainer col-md-12 col-xs-12">
            <div class="details col-md-3 col-xs-12" style="background-image:url({news.pathImg})" >
            </div>
            <div class="post borderBox col-md-9 col-xs-12"">
