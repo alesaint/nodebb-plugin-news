@@ -6,6 +6,9 @@ var	NodeBB = require('./lib/nodebb'),
     Backend = require('./lib/backend'),
     Settings = NodeBB.settings,
     categories = NodeBB.categories,
+    SocketPlugins = NodeBB.SocketPlugins,
+    PostTools = NodeBB.PostTools,
+    Topics = NodeBB.Topics,
     app;
 
 
@@ -48,10 +51,21 @@ News.register = {
         app.get('/api' + Config.plugin.route +'/list', getNews);
 
         app.post('/api/admin' + Config.plugin.route +'/add', addNews);
+        app.post('/api/admin' + Config.plugin.route +'/edit', editNews);
         app.post('/api/admin' + Config.plugin.route +'/remove', removeNews);
+        app.post('/api/admin' + Config.plugin.route +'/highlight', highlightNews);
         app.post('/api/admin' + Config.plugin.route +'/addTopic', addTopic);
         app.post('/api/admin' + Config.plugin.route +'/addCategoryForNews', addCategoryForNews);
 
+        SocketPlugins[Config.plugin.id] = {
+            get: function(socket, newsId, callback) {
+                if (newsId) {
+                    Backend.getNewsById(newsId, function(err, news) {
+                        callback(err, news);
+                    });
+                }
+            }
+        };
 
 
 
@@ -111,6 +125,10 @@ News.widget = {
         //Remove any container
         widget.data.container = '';
         Config.getTemplateData(function(data) {
+            data.news = data.news.filter(function(news) {
+                return news.highlight;
+            });
+
             app.render('news/slide', data, callback);
         })
 
@@ -134,7 +152,40 @@ function addNews(req, res, next) {
     });
 }
 
+function editNews(req, res, next) {
 
+    var title = req.body.title;
+    var content =  req.body.content;
+    var sid =  req.body.sid;
+    var uid =  req.user.uid;
+    var tid =  req.body.tid;
+    var topicThumb = req.body.topicThumb;
+
+    Backend.getNewsById(("news:"+sid),function(error, news) {
+        news.title = title;
+        news.content = content;
+        news.sid = sid;
+        Backend.editNews(news, sid, function (error, news) {
+
+            Topics.getTopicData(tid,function(err, data){
+                PostTools.edit(uid, data.mainPid, title, content, {topic_thumb: topicThumb, tags: []}, function(err, results) {
+                    if(err) {
+                        return callback(err);
+                    }
+
+                    res.json(results);
+                });
+
+            })
+
+
+
+
+
+
+        });
+    })
+}
 
 
 
@@ -183,6 +234,7 @@ function getNews(req, res, next) {
     });
 }
 
+
 function removeNews(req, res, next) {
     var sid = req.body.cid;
     Backend.removeNews(sid,function(){
@@ -191,6 +243,16 @@ function removeNews(req, res, next) {
     });
 
 }
+function highlightNews(req, res, next) {
+    var sid = req.body.cid;
+    var highlight = parseInt(req.body.highlight,10);
+    Backend.setHighlight(sid, highlight,function(){
+        res.redirect('/admin' + Config.plugin.route);
+
+    });
+
+}
+
 
 
 function addTopic(req, res, next) {

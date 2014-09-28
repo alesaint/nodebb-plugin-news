@@ -1,3 +1,4 @@
+<!-- IF news.length -->
 <div id="slidebox">
     <div class="inner">
         <div class="left"><div></div></div>
@@ -12,5 +13,5 @@
         </div>
     </div>
 </div>
-
+<!-- ENDIF news.length -->
 <script src="/plugins/nodebb-plugin-news/public/js/widget.js"></script>

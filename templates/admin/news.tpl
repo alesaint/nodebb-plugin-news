@@ -3,7 +3,7 @@
         <h1>News</h1>
 
     <div class="col-md-12">
-        <form class="form" id="newsSettingsForm" method="post" action="/admin/news/add">
+        <form class="form" id="newsSettingsForm" method="post">
             <h3>Settings News</h3>
 
             <hr>
@@ -19,16 +19,11 @@
             </div>
 
 
-             <button id="saveSettings" class="btn btn-success btn-xs pull-right">
-                       Save
-             </button>
-
-
         </form>
     </div>
 
     <div class="col-xs-6 pull-left">
-        <form class="form" id="newsForm" method="post" action="/admin/news/add">
+        <form class="form" id="newsForm" method="post">
             <h3>Add news</h3>
 
             <hr>
@@ -45,15 +40,32 @@
                <textarea class="form-control" id="description" name="description" rows="15"></textarea>
             </div>
 
-            <hr>
+<hr>
+
+            <div class="form-group hidden col-xs-12">
+                <div id="editImgNews"></div>
+                <button id="editImgBtn" class="btn btn-default btn-xs pull-left">
+                           Image
+                 </button>
+
+            </div>
 
             <input type="hidden" name="_csrf" value="{token}" id="csrf-token" />
             <input type="hidden" name="catId" value="{catId}" id="catId" />
+            <input type="hidden" name="hiddenNewsId" value="" id="hiddenNewsId" />
+            <input type="hidden" name="hiddenNewsImg" value="" id="hiddenNewsImg" />
+            <input type="hidden" name="hiddenTopicId" value="" id="hiddenTopicId" />
 
 
-             <button id="save" class="btn btn-success btn-xs pull-right">
-                       Save
-             </button>
+<hr>
+
+              <button id="edit" class="btn btn-success btn-xs pull-left hidden">
+                        Save
+              </button>
+                 <button id="save" class="btn btn-success btn-xs pull-left">
+                           Save
+                 </button>
+
 
 
         </form>
@@ -71,17 +83,22 @@
                     <div class="well">
                         <form class="form">
                             <div class="row">
-                               <div class="col-sm-8 col-xs-12">
+                               <div class="col-sm-6 col-xs-12">
                                     <div class="form-group">
                                         <label id="id-{news._key}-title">{news.title}</label>
                                     </div>
                                </div>
-                               <div class="col-sm-4 col-xs-12">
+                               <div class="col-sm-6 col-xs-12">
                                   <div class="form-group">
                                         <div class="dropdown">
-                                            <button class="btn btn-default edit">Edit</button>
 
-                                            <button class="btn btn-primary remove">Remove</button>
+                                            <button class="btn btn-default edit">Edit</button>
+                                            <!-- IF news.highlight -->
+                                            <button class="btn btn-danger highlight" id="disableHighlight">header</button>
+                                             <!-- ELSE -->
+                                             <button class="btn btn-success highlight" id="enableHighlight">header</button>
+                                             <!-- ENDIF news.highlight -->
+                                            <button class="btn btn-danger remove">Remove</button>
                                         </div>
                                     </div>
                                </div>
