@@ -71,15 +71,12 @@ News.register = {
                     })
             },
             loadMore:function(socket, data, callback){
-
-                console.log("loadMore>>>>>>>>>//")
                 var start = parseInt(data.after, 10),
-                    end = start + 5 - 1;
+                    end = (start -1) + 5;
 
                 Config.getTemplateData(function(data) {
-                    console.log("getTemplateData>>>>>>>>>//",data)
                     callback(null, data);
-                }, 0, -1);
+                }, (start -1), end);
             }
         };
 
@@ -155,7 +152,7 @@ News.widget = {
         Config.getTemplateData(function(data) {
 
             app.render('news', data, callback);
-        }, 0, 4);
+        }, 0, 5);
 
     }
 };

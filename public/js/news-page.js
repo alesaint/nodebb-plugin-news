@@ -5,6 +5,7 @@
         require(['forum/infinitescroll'], function(infinitescroll) {
 
             function enableInfiniteLoadingOrPagination() {
+                    console.log(" enableInfiniteLoadingOrPagination>>>>>>>>")
                     infinitescroll.init(loadMoreNews);
             }
 
@@ -26,7 +27,6 @@
             };
 
             function loadNewsAfter(after, callback) {
-
 
                  infinitescroll.loadMore('plugins.news.loadMore', {
                     after: after
