@@ -170,10 +170,12 @@ function editNews(req, res, next) {
 
     var title = req.body.title;
     var content =  req.body.content;
+    var contentPost =  req.body.contentPost;
     var sid =  req.body.sid;
     var uid =  req.user.uid;
     var tid =  req.body.tid;
     var topicThumb = req.body.topicThumb;
+
 
     Backend.getNewsById(("news:"+sid),function(error, news) {
         news.title = title;
@@ -182,7 +184,7 @@ function editNews(req, res, next) {
         Backend.editNews(news, sid, function (error, news) {
 
             Topics.getTopicData(tid,function(err, data){
-                PostTools.edit(uid, data.mainPid, title, content, {topic_thumb: topicThumb, tags: []}, function(err, results) {
+                PostTools.edit(uid, data.mainPid, title, contentPost, {topic_thumb: topicThumb, tags: []}, function(err, results) {
                     if(err) {
                         return callback(err);
                     }

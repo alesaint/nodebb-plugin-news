@@ -75,6 +75,7 @@
                     _csrf : csrf,
                     title : title,
                     content : content,
+                    contentPost:  img + "<br/>" + content,
                     sid: sid,
                     tid: tid,
                     topicThumb: img

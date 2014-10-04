@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-news",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "NodeBB News Plugin",
   "main": "library.js",
   "scripts": {
