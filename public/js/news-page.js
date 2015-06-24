@@ -12,11 +12,12 @@
 
 
             function loadMoreNews(direction) {
+                console.log(">loadMoreNews>>>>>>");
                 if (!$('#news-container').length || !$('#news-container').children().length) {
                     return;
                 }
 
-                infinitescroll.calculateAfter(direction, '#news-container article[data-sid]', 5, function(after, offset, el) {
+                infinitescroll.calculateAfter(direction, '#news-container article[data-sid]', 5,false, function(after, offset, el) {
 
                     loadNewsAfter(after, function() {
                         if (direction < 0 && el) {
@@ -27,7 +28,7 @@
             };
 
             function loadNewsAfter(after, callback) {
-
+                console.log(">loadNewsAfter>>>>>>");
                  infinitescroll.loadMore('plugins.news.loadMore', {
                     after: after
                 }, function (data, done) {
@@ -108,6 +109,7 @@
 
 
             scrollToTopic = function(newsId, clickedTid, duration, offset) {
+                console.log(">scrollToTopic>>>>>>");
                 if(!tid) {
                     return;
                 }

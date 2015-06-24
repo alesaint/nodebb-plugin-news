@@ -28,10 +28,9 @@
                     title : title,
                     content : content
                 },  function(news) {
-
-
                     uploader.open('/admin/news/uploadImage', {cid: news.sid}, 0, function(imageUrlOnServer) {
-
+                        debugger;
+                        console.log(imageUrlOnServer);
                             var action = 'topics.post';
                             composerData = {
                                 title: title,
@@ -75,7 +74,7 @@
                     _csrf : csrf,
                     title : title,
                     content : content,
-                    contentPost:  img + "<br/>" + content,
+                    contentPost: "<img src='"+img+"'/><br/>" + content,
                     sid: sid,
                     tid: tid,
                     topicThumb: img
@@ -162,8 +161,9 @@
 
             $('#editImgBtn').click(function(event) {
                 event.preventDefault();
-                var id = $('#hiddenNewsId').val();
-                uploader.open('/admin/news/uploadImage', {cid: id}, 0, function(imageUrlOnServer) {
+                var id = $('#hiddenNewsId').val() + "";
+                debugger;
+                uploader.open('/admin/news/uploadImage',{ cid: id }, 0, function(imageUrlOnServer) {
                     $('#editImgNews').css('background-image', 'url(' + imageUrlOnServer + ')');
                 })
             });
@@ -197,7 +197,6 @@
             }
 
             function updateNewsOrders() {
-                console.log("updateNewsOrders");
                 var news = $('.admin-news #entry-container').children();
                 for(var i = 0; i<news.length; ++i) {
                     var input = $(news[i]).find('input[data-name="order"]');
@@ -205,14 +204,11 @@
                     input.val(i+1).attr('data-value', i+1);
                     modified(input);
                 }
-                console.log("before save");
                 saveOrder();
             }
 
             function saveOrder() {
-                console.log("modified_news>>>>>>>>>>>>>>",modified_news);
                 if(modified_news.length) {
-                    console.log("emit>>>>>>>>>>>>>>");
                     socket.emit('plugins.news.order', modified_news, function(err, result) {
                         console.log("Success save order");
                     })

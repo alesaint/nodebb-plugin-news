@@ -2,7 +2,9 @@ var	NodeBB = require('./lib/nodebb'),
     fs = require('fs'),
     path = require('path'),
     file = NodeBB.file,
-	Config = require('./lib/config'),
+    plugins = NodeBB.plugins,
+    nconf = require('nconf'),
+    Config = require('./lib/config'),
     Backend = require('./lib/backend'),
     Settings = NodeBB.settings,
     categories = NodeBB.categories,
@@ -15,8 +17,7 @@ var	NodeBB = require('./lib/nodebb'),
 var News = {};
 
 News.register = {
-	load: function(expressApp, middleware, controllers, callback) {
-		app = expressApp;
+	load: function(params, callback) {
 
 
 		function renderGlobal(req, res, next) {
@@ -27,7 +28,7 @@ News.register = {
 
 		function renderAdmin(req, res, next) {
             Config.getTemplateData(function(data) {
-                categories.getAllCategories(function (err, categoryData) {
+                categories.getAllCategories(0,function (err, categoryData) {
 
                     data.categories = categoryData;
                     res.render('admin/' + Config.plugin.id, data);
@@ -37,25 +38,33 @@ News.register = {
 
             });
 		}
+        app = params.app;
 
+        var router = params.router;
+        router.get(Config.plugin.route, params.middleware.buildHeader, renderGlobal);
+        router.get('/api' + Config.plugin.route, renderGlobal);
 
+        router.get('/admin' + Config.plugin.route, params.middleware.admin.buildHeader, renderAdmin);
 
-        app.get(Config.plugin.route, middleware.buildHeader, renderGlobal);
-		app.get('/api' + Config.plugin.route, renderGlobal);
+        var multipart = require('connect-multiparty');
+        var multipartMiddleware = multipart();
 
-		app.get('/admin' + Config.plugin.route, middleware.admin.buildHeader, renderAdmin);
-        app.post('/admin' + Config.plugin.route +'/uploadImage', middleware.authenticate, uploadImage);
+        var middlewares = [multipartMiddleware, params.middleware.validateFiles, params.middleware.applyCSRF, params.middleware.authenticate];
 
-        app.get('/api/admin' + Config.plugin.route, renderAdmin);
+        //router.post('/category/uploadpicture', middlewares, controllers.admin.uploads.uploadCategoryPicture);
 
-        app.get('/api' + Config.plugin.route +'/list', getNews);
+        router.post('/admin' + Config.plugin.route +'/uploadImage',middlewares, uploadImage);
 
-        app.post('/api/admin' + Config.plugin.route +'/add', addNews);
-        app.post('/api/admin' + Config.plugin.route +'/edit', editNews);
-        app.post('/api/admin' + Config.plugin.route +'/remove', removeNews);
-        app.post('/api/admin' + Config.plugin.route +'/highlight', highlightNews);
-        app.post('/api/admin' + Config.plugin.route +'/addTopic', addTopic);
-        app.post('/api/admin' + Config.plugin.route +'/addCategoryForNews', addCategoryForNews);
+        router.get('/api/admin' + Config.plugin.route, renderAdmin);
+
+        router.get('/api' + Config.plugin.route +'/list', getNews);
+
+        router.post('/api/admin' + Config.plugin.route +'/add', addNews);
+        router.post('/api/admin' + Config.plugin.route +'/edit', editNews);
+        router.post('/api/admin' + Config.plugin.route +'/remove', removeNews);
+        router.post('/api/admin' + Config.plugin.route +'/highlight', highlightNews);
+        router.post('/api/admin' + Config.plugin.route +'/addTopic', addTopic);
+        router.post('/api/admin' + Config.plugin.route +'/addCategoryForNews', addCategoryForNews);
 
         SocketPlugins[Config.plugin.id] = {
             get: function(socket, newsId, callback) {
@@ -66,9 +75,9 @@ News.register = {
                 }
             },
             order: function(socket, newsList, callback){
-                    Backend.setOrder(newsList, function(err, news) {
-                        callback(err, news);
-                    })
+                Backend.setOrder(newsList, function(err, news) {
+                    callback(err, news);
+                })
             },
             loadMore:function(socket, data, callback){
                 var start = parseInt(data.after, 10),
@@ -82,7 +91,8 @@ News.register = {
 
 
 
-        callback(expressApp, middleware, controllers);
+        //Config.init(callback);
+
 	},
     created: function(topic,cb) {
     },
@@ -184,7 +194,8 @@ function editNews(req, res, next) {
         Backend.editNews(news, sid, function (error, news) {
 
             Topics.getTopicData(tid,function(err, data){
-                PostTools.edit(uid, data.mainPid, title, contentPost, {topic_thumb: topicThumb, tags: []}, function(err, results) {
+
+                PostTools.edit({"uid":uid,"pid":data.mainPid,"title":title,"content":contentPost,topic_thumb: topicThumb, tags: []}, function(err, results) {
                     if(err) {
                         return callback(err);
                     }
@@ -211,37 +222,42 @@ function editNews(req, res, next) {
 
 function uploadImage(req, res, next) {
 
-    try {
-        params = JSON.parse(req.body.params);
-    } catch (e) {
-        var err = {
-            error: 'Error uploading file! Error :' + e.message
-        };
-        return res.send(req.xhr ? err : JSON.stringify(err));
-    }
-    var filename =  'news-' + params.cid + path.extname(req.files.userPhoto.name);
-    function done(err, image) {
-        var er, rs;
-        fs.unlink(req.files.userPhoto.path);
-
-        if(err) {
-            er = {error: err.message};
-            return res.send(req.xhr ? er : JSON.stringify(er));
+        try {
+            params = JSON.parse(req.body.params);
+        } catch (e) {
+            var err = {
+                error: 'Error uploading file! Error :' + e.message
+            };
+            return res.send(req.xhr ? err : JSON.stringify(err));
         }
 
-        Backend.addImg(params.cid,image.url, function(){
-            rs = {path: image.url};
-            res.send(req.xhr ? rs : JSON.stringify(rs));
+    var uploadedFile = req.files.files[0];
+    var filename =  'news-' + params.cid + path.extname(uploadedFile.name);
+
+    function done(err, image) {
+        fs.unlink(uploadedFile.path);
+        if (err) {
+            return next(err);
+        }
+        var url = image.url.startsWith('http') ? image.url : nconf.get('relative_path') + image.url;
+        Backend.addImg(params.cid,url, function(){
+            res.json([{name: uploadedFile.name, url: url}]);
         });
 
 
     }
 
-    file.saveFileToLocal(filename, req.files.userPhoto.path, done);
+    if (plugins.hasListeners('filter:uploadImage')) {
+        plugins.fireHook('filter:uploadImage', {image: uploadedFile, uid: req.user.uid}, done);
+    } else {
+        file.saveFileToLocal(filename, '', uploadedFile.path, done);
+    }
 
 
 
 }
+
+
 
 function getNews(req, res, next) {
     Backend.getNews(0,-1,function(err,data){
@@ -252,6 +268,7 @@ function getNews(req, res, next) {
 
 
 function removeNews(req, res, next) {
+    console.log("removeNews req.body.cid",req.body.cid);
     var sid = req.body.cid;
     Backend.removeNews(sid,function(){
         res.redirect('/admin' + Config.plugin.route);
