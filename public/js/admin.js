@@ -29,7 +29,6 @@
                     content : content
                 },  function(news) {
                     uploader.open('/admin/news/uploadImage', {cid: news.sid}, 0, function(imageUrlOnServer) {
-                        debugger;
                         console.log(imageUrlOnServer);
                             var action = 'topics.post';
                             composerData = {
@@ -162,7 +161,6 @@
             $('#editImgBtn').click(function(event) {
                 event.preventDefault();
                 var id = $('#hiddenNewsId').val() + "";
-                debugger;
                 uploader.open('/admin/news/uploadImage',{ cid: id }, 0, function(imageUrlOnServer) {
                     $('#editImgNews').css('background-image', 'url(' + imageUrlOnServer + ')');
                 })
